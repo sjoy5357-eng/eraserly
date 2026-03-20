@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Photo Editor Pro - Background Remover & Image Resizer</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <h1 class="nav-brand">Photo Editor Pro</h1>
+            <ul class="nav-menu">
+                <li><a href="#home" class="nav-link active" data-section="home">Home</a></li>
+                <li><a href="#background-remover" class="nav-link" data-section="background-remover">Background Remover</a></li>
+                <li><a href="#image-resizer" class="nav-link" data-section="image-resizer">Image Resizer</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Home Section -->
+        <section id="home" class="section active">
+            <div class="home-content">
+                <h1 class="home-title">Photo Editor Pro</h1>
+                <p class="home-subtitle">Professional photo editing tools in your browser</p>
+                
+                <div class="features-grid">
+                    <div class="feature-card" data-tool="background-remover">
+                        <div class="feature-icon">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <polyline points="17 8 12 3 7 8"></polyline>
+                                <line x1="12" y1="3" x2="12" y2="15"></line>
+                            </svg>
+                        </div>
+                        <h3>Background Remover</h3>
+                        <p>Remove backgrounds from images instantly with AI-powered technology</p>
+                        <button class="btn btn-primary feature-btn" data-tool="background-remover">Remove Background</button>
+                    </div>
+                    
+                    <div class="feature-card" data-tool="image-resizer">
+                        <div class="feature-icon">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                                <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                                <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                            </svg>
+                        </div>
+                        <h3>Image Resizer</h3>
+                        <p>Resize images to any dimensions with quality preservation</p>
+                        <button class="btn btn-primary feature-btn" data-tool="image-resizer">Resize Image</button>
+                    </div>
+                </div>
+                
+                <div class="home-footer">
+                    <p>Fast, Free, Secure - All processing happens in your browser</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Background Remover Section -->
+        <section id="background-remover" class="section">
+            <div class="section-header">
+                <h2>Background Remover</h2>
+                <p>Powered by remove.bg AI - Professional background removal</p>
+            </div>
+
+            <div class="upload-section">
+                <div class="upload-area" id="uploadArea">
+                    <div class="upload-content">
+                        <svg class="upload-icon" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="17 8 12 3 7 8"></polyline>
+                            <line x1="12" y1="3" x2="12" y2="15"></line>
+                        </svg>
+                        <h3>Drop your image here</h3>
+                        <p>or click to browse</p>
+                        <input type="file" id="fileInput" accept="image/*" hidden>
+                        <button class="browse-btn" onclick="document.getElementById('fileInput').click()">Browse Files</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="processing-section" id="processingSection" style="display: none;">
+                <div class="processing-content">
+                    <div class="spinner"></div>
+                    <p>Removing background...</p>
+                </div>
+            </div>
+
+            <div class="result-section" id="resultSection" style="display: none;">
+                <div class="image-comparison">
+                    <div class="image-container">
+                        <h3>Original</h3>
+                        <img id="originalImage" alt="Original image">
+                    </div>
+                    <div class="image-container">
+                        <h3>Background Removed</h3>
+                        <canvas id="resultCanvas"></canvas>
+                    </div>
+                </div>
+                
+                <div class="background-options">
+                    <h4>Background Options</h4>
+                    <div class="background-controls">
+                        <div class="color-picker-group">
+                            <label for="bgColorPicker">Background Color:</label>
+                            <input type="color" id="bgColorPicker" value="#ffffff">
+                            <button class="btn btn-small" id="transparentBtn">Transparent</button>
+                        </div>
+                        <div class="preset-colors">
+                            <span>Quick Colors:</span>
+                            <div class="color-preset" data-color="#ffffff" style="background: #ffffff;"></div>
+                            <div class="color-preset" data-color="#000000" style="background: #000000;"></div>
+                            <div class="color-preset" data-color="#ff0000" style="background: #ff0000;"></div>
+                            <div class="color-preset" data-color="#00ff00" style="background: #00ff00;"></div>
+                            <div class="color-preset" data-color="#0000ff" style="background: #0000ff;"></div>
+                            <div class="color-preset" data-color="#ffff00" style="background: #ffff00;"></div>
+                            <div class="color-preset" data-color="#ff00ff" style="background: #ff00ff;"></div>
+                            <div class="color-preset" data-color="#00ffff" style="background: #00ffff;"></div>
+                            <div class="color-preset custom-color" data-color="custom" style="background: linear-gradient(45deg, #ff0000, #00ff00, #0000ff);">+</div>
+                        </div>
+                        <div class="background-image-upload">
+                            <span>Background Image:</span>
+                            <input type="file" id="bgImageInput" accept="image/*" hidden>
+                            <button class="btn btn-small" id="bgImageBtn">Upload Background</button>
+                            <button class="btn btn-small" id="clearBgImageBtn" style="display: none;">Remove Background Image</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="action-buttons">
+                    <div class="download-group">
+                        <select id="formatSelect" class="format-select">
+                            <option value="png">PNG (Transparent)</option>
+                            <option value="jpeg">JPEG</option>
+                            <option value="jpg">JPG</option>
+                        </select>
+                        <button class="btn btn-primary" id="downloadBtn">Download</button>
+                    </div>
+                    <button class="btn btn-secondary" id="newImageBtn">Remove Another Background</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Image Resizer Section -->
+        <section id="image-resizer" class="section">
+            <div class="section-header">
+                <h2>Image Resizer</h2>
+                <p>Resize images to any dimensions with quality preservation</p>
+            </div>
+
+            <div class="resize-upload-section">
+                <div class="upload-area" id="resizeUploadArea">
+                    <div class="upload-content">
+                        <svg class="upload-icon" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                            <polyline points="17 8 12 3 7 8"></polyline>
+                            <line x1="12" y1="3" x2="12" y2="15"></line>
+                        </svg>
+                        <h3>Drop your image here</h3>
+                        <p>or click to browse</p>
+                        <input type="file" id="resizeFileInput" accept="image/*" hidden>
+                        <button class="browse-btn" onclick="document.getElementById('resizeFileInput').click()">Browse Files</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="resize-controls-section" id="resizeControlsSection" style="display: none;">
+                <div class="resize-preview">
+                    <div class="preview-container">
+                        <h3>Original Image</h3>
+                        <img id="resizeOriginalImage" alt="Original image">
+                        <div class="image-info">
+                            <span id="originalDimensions">Dimensions: 0 x 0</span>
+                            <span id="originalSize">Size: 0 KB</span>
+                        </div>
+                    </div>
+                    
+                    <div class="preview-container">
+                        <h3>Preview</h3>
+                        <canvas id="resizePreviewCanvas"></canvas>
+                        <div class="image-info">
+                            <span id="newDimensions">Dimensions: 0 x 0</span>
+                            <span id="newSize">Size: ~0 KB</span>
+                            <button class="btn btn-small resize-preview-btn" id="resizePreviewBtn">Resize Image</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="resize-options">
+                    <div class="resize-method">
+                        <h4>Resize Method</h4>
+                        <div class="method-select">
+                            <select id="resizeMethodSelect" class="format-select">
+                                <option value="pixels">Pixels</option>
+                                <option value="percentage">Percentage</option>
+                                <option value="centimeters">Centimeters</option>
+                                <option value="inches">Inches</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="resize-fit">
+                        <h4>Image Fit Options</h4>
+                        <div class="fit-options">
+                            <label class="radio-option">
+                                <input type="radio" name="fitMethod" value="none" checked>
+                                <span>None (Custom Size)</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="fitMethod" value="crop">
+                                <span>Crop to Fit</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="fitMethod" value="stretch">
+                                <span>Stretch to Fit</span>
+                            </label>
+                            <label class="radio-option">
+                                <input type="radio" name="fitMethod" value="fit">
+                                <span>Fit Within Bounds</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="resize-compression">
+                        <h4>Compression Options</h4>
+                        <div class="compression-controls">
+                            <div class="input-group">
+                                <label for="qualityInput">Quality:</label>
+                                <input type="range" id="qualityInput" min="10" max="100" value="90">
+                                <span id="qualityValue">90%</span>
+                            </div>
+                            <div class="input-group">
+                                <label for="compressionMethod">Method:</label>
+                                <select id="compressionMethod" class="format-select">
+                                    <option value="auto">Auto</option>
+                                    <option value="lossless">Lossless (PNG)</option>
+                                    <option value="lossy">Lossy (JPG)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="resize-batch">
+                        <h4>Batch Processing</h4>
+                        <div class="batch-controls">
+                            <button class="btn btn-small" id="addImageBtn">Add Another Image</button>
+                            <button class="btn btn-small" id="clearBatchBtn">Clear All</button>
+                            <div class="batch-list" id="batchList">
+                                <div class="batch-item">
+                                    <span class="batch-name">No images added</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="resize-dimensions">
+                        <h4>Dimensions</h4>
+                        <div class="dimension-inputs">
+                            <div class="input-group">
+                                <label for="widthInput">Width:</label>
+                                <input type="number" id="widthInput" min="1" max="5000" step="0.1">
+                                <span id="widthUnit">px</span>
+                            </div>
+                            <div class="input-group">
+                                <label for="heightInput">Height:</label>
+                                <input type="number" id="heightInput" min="1" max="5000" step="0.1">
+                                <span id="heightUnit">px</span>
+                            </div>
+                        </div>
+                        
+                        <div class="dpi-control">
+                            <div class="input-group">
+                                <label for="dpiInput">DPI:</label>
+                                <input type="number" id="dpiInput" min="72" max="600" value="300">
+                                <span>DPI</span>
+                            </div>
+                        </div>
+                        
+                        <div class="aspect-ratio-control">
+                            <label class="checkbox-option">
+                                <input type="checkbox" id="maintainAspectRatio" checked>
+                                <span>Maintain aspect ratio</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="file-size-control">
+                        <h4>File Size Target</h4>
+                        <div class="file-size-options">
+                            <div class="input-group">
+                                <label for="fileSizeInput">Target Size:</label>
+                                <input type="number" id="fileSizeInput" min="1" max="10000" step="0.1">
+                                <select id="fileSizeUnit" class="format-select">
+                                    <option value="KB">KB</option>
+                                    <option value="MB">MB</option>
+                                </select>
+                                <span id="actualFileSize" class="actual-size-info">Actual: ~0 KB</span>
+                            </div>
+                            <label class="checkbox-option">
+                                <input type="checkbox" id="enableFileSizeTarget">
+                                <span>Enable file size target (may reduce quality)</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="preset-sizes">
+                        <h4>Common Sizes</h4>
+                        <div class="preset-buttons">
+                            <button class="preset-btn" data-width="1920" data-height="1080">1920×1080</button>
+                            <button class="preset-btn" data-width="1280" data-height="720">1280×720</button>
+                            <button class="preset-btn" data-width="800" data-height="600">800×600</button>
+                            <button class="preset-btn" data-width="500" data-height="500">500×500</button>
+                            <button class="preset-btn" data-width="400" data-height="400">400×400</button>
+                            <button class="preset-btn" data-width="200" data-height="200">200×200</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="resize-action-buttons">
+                    <div class="download-group">
+                        <select id="resizeFormatSelect" class="format-select">
+                            <option value="png">PNG</option>
+                            <option value="jpeg">JPEG</option>
+                            <option value="jpg">JPG</option>
+                            <option value="webp">WebP</option>
+                        </select>
+                        <button class="btn btn-primary" id="resizeDownloadBtn">Download Resized</button>
+                        <button class="btn btn-secondary" id="processBatchBtn">Process All Batch</button>
+                    </div>
+                    <button class="btn btn-secondary" id="resizeNewImageBtn">Resize Another Image</button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <footer class="footer">
+        <p>Photo Editor Pro - Fast, Free, Secure</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
